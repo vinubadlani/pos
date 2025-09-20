@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { uploadImageToVercel, storeImageLocally } from '../utils/imageUpload';
+import { uploadToGoogleDrive, storeImageLocally } from '../utils/driveUpload';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { CartContext, type Order } from '../App';
@@ -7,7 +7,7 @@ import { CartContext, type Order } from '../App';
 const isDevelopment = window.location.hostname === 'localhost';
 const log = (...args: any[]) => {
   if (isDevelopment) {
-    log(...args);
+    console.log(...args);
   }
 };
 
@@ -76,20 +76,20 @@ const CheckoutPage: React.FC = () => {
     }
   };
 
-  // Function to process image for Vercel hosting
+  // Function to process image for Google Drive hosting
   const uploadImageToCloud = async (imageFile: File): Promise<string | null> => {
     try {
-      log('🔄 Processing image for Vercel hosting...');
+      log('🔄 Uploading image to Google Drive...');
       setIsUploadingImage(true);
       
-      // Use our simple Vercel upload utility
-      const result = await uploadImageToVercel(imageFile);
+      // Use our Google Drive upload utility
+      const result = await uploadToGoogleDrive(imageFile);
       
       if (result.success && result.url) {
-        log('✅ Image processed successfully for Vercel');
+        log('✅ Image uploaded successfully to Google Drive');
         return result.url;
       } else {
-        console.warn('⚠️ Image processing failed:', result.error);
+        console.warn('⚠️ Google Drive upload failed:', result.error);
         
         // Create local backup
         const orderNumber = generateOrderNumber();
@@ -98,12 +98,12 @@ const CheckoutPage: React.FC = () => {
         return localUrl;
       }
     } catch (error) {
-      console.error('❌ Image processing failed:', error);
+      console.error('❌ Image upload failed:', error);
       try {
         // Create local backup
         const orderNumber = generateOrderNumber();
         const localUrl = await storeImageLocally(imageFile, orderNumber);
-        log('� Image stored locally as fallback');
+        log('💾 Image stored locally as fallback');
         return localUrl;
       } catch (backupError) {
         console.error('❌ Local backup also failed:', backupError);
@@ -503,13 +503,13 @@ const CheckoutPage: React.FC = () => {
                   />
                   <p className="payment-filename">{paymentScreenshot.name}</p>
                   <p className="payment-info">
-                    📤 Image will be uploaded to cloud storage and Google Drive for public access
+                    📤 Image will be uploaded to Google Drive for public access in sheets
                   </p>
                 </div>
               )}
               {isUploadingImage && (
                 <div className="upload-progress">
-                  🔄 Uploading to Google Drive and cloud storage...
+                  🔄 Uploading to Google Drive...
                 </div>
               )}
             </div>

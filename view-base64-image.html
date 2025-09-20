@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Image Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            font-family: monospace;
+            font-size: 12px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .image-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #displayedImage {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Base64 Image Viewer</h1>
+        
+        <div class="info">
+            <h3>📋 How to use:</h3>
+            <ol>
+                <li>Paste your base64 image data below (with or without the data:image prefix)</li>
+                <li>Click "Display Image" to view it</li>
+                <li>Click "Download Image" to save it to your computer</li>
+            </ol>
+        </div>
+
+        <label for="base64Input"><strong>Base64 Image Data:</strong></label>
+        <textarea 
+            id="base64Input" 
+            placeholder="Paste your base64 image data here (e.g., data:image/jpeg;base64,/9j/4AAQ... or just /9j/4AAQ...)"
+        >data:image/jpeg;base64,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AAAAAAAAAACCAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</textarea>
+
+        <div style="margin-top: 10px;">
+            <button onclick="displayImage()">🖼️ Display Image</button>
+            <button onclick="downloadImage()">💾 Download Image</button>
+            <button onclick="clearInput()">🗑️ Clear</button>
+        </div>
+
+        <div id="result" class="image-container" style="display: none;">
+            <h3>Your Image:</h3>
+            <img id="displayedImage" alt="Decoded base64 image" />
+        </div>
+    </div>
+
+    <script>
+        function displayImage() {
+            const input = document.getElementById('base64Input').value.trim();
+            const resultDiv = document.getElementById('result');
+            const img = document.getElementById('displayedImage');
+            
+            // Clear any previous error messages
+            const existingError = document.querySelector('.error');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            if (!input) {
+                showError('Please paste some base64 image data first.');
+                return;
+            }
+            
+            try {
+                let base64Data = input;
+                
+                // Check if it already has the data URL prefix
+                if (!input.startsWith('data:')) {
+                    // Add the data URL prefix (assuming JPEG, but this works for most images)
+                    base64Data = 'data:image/jpeg;base64,' + input;
+                }
+                
+                // Set the image source
+                img.src = base64Data;
+                img.onload = function() {
+                    resultDiv.style.display = 'block';
+                    showSuccess('Image displayed successfully! Image dimensions: ' + this.naturalWidth + 'x' + this.naturalHeight + ' pixels');
+                };
+                img.onerror = function() {
+                    showError('Failed to load image. Please check if the base64 data is valid.');
+                };
+                
+            } catch (error) {
+                showError('Error processing base64 data: ' + error.message);
+            }
+        }
+        
+        function downloadImage() {
+            const img = document.getElementById('displayedImage');
+            if (!img.src || img.src === '') {
+                showError('Please display an image first before downloading.');
+                return;
+            }
+            
+            try {
+                // Create a temporary link element
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.download = 'decoded-image-' + new Date().getTime() + '.jpg';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showSuccess('Image download started!');
+            } catch (error) {
+                showError('Failed to download image: ' + error.message);
+            }
+        }
+        
+        function clearInput() {
+            document.getElementById('base64Input').value = '';
+            document.getElementById('result').style.display = 'none';
+            const existingMessages = document.querySelectorAll('.error, .success');
+            existingMessages.forEach(msg => msg.remove());
+        }
+        
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = '❌ ' + message;
+            document.querySelector('.container').appendChild(errorDiv);
+        }
+        
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success';
+            successDiv.textContent = '✅ ' + message;
+            document.querySelector('.container').appendChild(successDiv);
+        }
+        
+        // Auto-display the image when the page loads if there's data
+        window.onload = function() {
+            const input = document.getElementById('base64Input').value.trim();
+            if (input) {
+                displayImage();
+            }
+        };
+    </script>
+</body>
+</html>
