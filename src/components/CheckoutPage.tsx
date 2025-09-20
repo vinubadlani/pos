@@ -4,6 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { CartContext, type Order } from '../App';
 
+const isDevelopment = window.location.hostname === 'localhost';
+const log = (...args: any[]) => {
+  if (isDevelopment) {
+    log(...args);
+  }
+};
+
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const { cart, clearCart, subtotal, delivery, grandTotal } = React.useContext(CartContext);
@@ -72,14 +79,14 @@ const CheckoutPage: React.FC = () => {
   // Function to process image for Vercel hosting
   const uploadImageToCloud = async (imageFile: File): Promise<string | null> => {
     try {
-      console.log('🔄 Processing image for Vercel hosting...');
+      log('🔄 Processing image for Vercel hosting...');
       setIsUploadingImage(true);
       
       // Use our simple Vercel upload utility
       const result = await uploadImageToVercel(imageFile);
       
       if (result.success && result.url) {
-        console.log('✅ Image processed successfully for Vercel');
+        log('✅ Image processed successfully for Vercel');
         return result.url;
       } else {
         console.warn('⚠️ Image processing failed:', result.error);
@@ -87,7 +94,7 @@ const CheckoutPage: React.FC = () => {
         // Create local backup
         const orderNumber = generateOrderNumber();
         const localUrl = await storeImageLocally(imageFile, orderNumber);
-        console.log('💾 Image stored locally as backup');
+        log('💾 Image stored locally as backup');
         return localUrl;
       }
     } catch (error) {
@@ -96,7 +103,7 @@ const CheckoutPage: React.FC = () => {
         // Create local backup
         const orderNumber = generateOrderNumber();
         const localUrl = await storeImageLocally(imageFile, orderNumber);
-        console.log('� Image stored locally as fallback');
+        log('� Image stored locally as fallback');
         return localUrl;
       } catch (backupError) {
         console.error('❌ Local backup also failed:', backupError);
@@ -120,14 +127,14 @@ const CheckoutPage: React.FC = () => {
       let paymentScreenshotUrl: string | undefined;
       
       if (paymentScreenshot) {
-        console.log('🔄 Uploading payment screenshot...');
+        log('🔄 Uploading payment screenshot...');
         setIsUploadingImage(true);
         const uploadedUrl = await uploadImageToCloud(paymentScreenshot);
         setIsUploadingImage(false);
         
         if (uploadedUrl) {
           paymentScreenshotUrl = uploadedUrl;
-          console.log('✅ Payment screenshot uploaded:', uploadedUrl);
+          log('✅ Payment screenshot uploaded:', uploadedUrl);
         } else {
           console.warn('⚠️ Failed to upload payment screenshot, proceeding without public URL');
           paymentScreenshotUrl = 'Upload failed - stored locally';
@@ -193,7 +200,7 @@ const CheckoutPage: React.FC = () => {
         }))
       };
 
-      console.log('Submitting order to Google Apps Script:', payload);
+      log('Submitting order to Google Apps Script:', payload);
 
       // Direct submission with no-cors to bypass CORS preflight issues
       let submitted = false;
@@ -201,7 +208,7 @@ const CheckoutPage: React.FC = () => {
 
       // Method 1: POST with no-cors (most reliable for Google Apps Script)
       try {
-        console.log('🔄 Attempting POST with no-cors...');
+        log('🔄 Attempting POST with no-cors...');
         
         await fetch(googleAppsScriptUrl, {
           method: 'POST',
@@ -212,7 +219,7 @@ const CheckoutPage: React.FC = () => {
           body: JSON.stringify(payload)
         });
         
-        console.log('✅ Order submitted via POST (no-cors mode)');
+        log('✅ Order submitted via POST (no-cors mode)');
         submitted = true;
         
       } catch (error) {
@@ -223,7 +230,7 @@ const CheckoutPage: React.FC = () => {
       // Method 2: GET fallback with query parameters (if POST failed)
       if (!submitted) {
         try {
-          console.log('🔄 Attempting GET fallback method...');
+          log('🔄 Attempting GET fallback method...');
           
           // Create a simpler payload for GET method
           const getPayload: any = {
@@ -239,7 +246,7 @@ const CheckoutPage: React.FC = () => {
           });
           
           const getUrl = `${googleAppsScriptUrl}?${queryParams.toString()}`;
-          console.log('📤 GET URL length:', getUrl.length);
+          log('📤 GET URL length:', getUrl.length);
           
           // Make the GET request
           await fetch(getUrl, { 
@@ -248,7 +255,7 @@ const CheckoutPage: React.FC = () => {
           });
           
           // With no-cors, we can't read the response, so we assume success if no error
-          console.log('✅ Order submitted via GET fallback (no-cors mode)');
+          log('✅ Order submitted via GET fallback (no-cors mode)');
           submitted = true;
           
         } catch (error) {
@@ -260,7 +267,7 @@ const CheckoutPage: React.FC = () => {
       // Method 3: Try CORS POST as final attempt (for testing)
       if (!submitted) {
         try {
-          console.log('🔄 Attempting CORS POST (final attempt)...');
+          log('🔄 Attempting CORS POST (final attempt)...');
           const response = await fetch(googleAppsScriptUrl, {
             method: 'POST',
             mode: 'cors',
@@ -274,7 +281,7 @@ const CheckoutPage: React.FC = () => {
           if (response.ok) {
             const result = await response.json();
             if (result.status === 'success') {
-              console.log('✅ Order submitted successfully via CORS POST:', result);
+              log('✅ Order submitted successfully via CORS POST:', result);
               submitted = true;
             } else {
               throw new Error(result.message || 'Server returned error status');

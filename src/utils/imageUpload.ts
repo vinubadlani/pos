@@ -1,4 +1,13 @@
 // Simple base64 image upload utility for Vercel hosting
+
+const isDevelopment = window.location.hostname === 'localhost';
+
+const log = (...args: any[]) => {
+  if (isDevelopment) {
+    console.log(...args);
+  }
+};
+
 export interface ImageUploadResult {
   success: boolean;
   url?: string;
@@ -7,6 +16,8 @@ export interface ImageUploadResult {
 
 export const uploadImageToVercel = async (file: File): Promise<ImageUploadResult> => {
   try {
+    log('🔄 Processing image for Vercel hosting...');
+    
     // Convert image to base64
     const base64 = await fileToBase64(file);
     
@@ -14,12 +25,14 @@ export const uploadImageToVercel = async (file: File): Promise<ImageUploadResult
     // This creates an immediate, accessible URL
     const dataUrl = `data:${file.type};base64,${base64}`;
     
+    log('✅ Image processed successfully for Vercel');
+    
     return {
       success: true,
       url: dataUrl
     };
   } catch (error) {
-    console.error('Image upload error:', error);
+    log('❌ Image upload error:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Upload failed'

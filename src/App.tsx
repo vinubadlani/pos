@@ -5,6 +5,7 @@ import {
   ShoppingBag,
   ClipboardList
 } from 'lucide-react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import CheckoutPage from './components/CheckoutPage';
 import OrdersPage from './components/OrdersPage';
 import InvoicePage from './components/InvoicePage';
@@ -876,6 +877,7 @@ function App() {
             <Route path="/admin/images" element={<ImageRecoveryAdmin />} />
           </Routes>
         </main>
+        <SpeedInsights />
       </div>
     </CartProvider>
   );
