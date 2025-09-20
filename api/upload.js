@@ -26,10 +26,33 @@ export default async function handler(req, res) {
     // Parse service account JSON from environment variable
     const saKeyString = process.env.GOOGLE_SA_KEY;
     if (!saKeyString) {
-      return res.status(500).json({ error: 'Google Service Account key not configured' });
+      return res.status(500).json({ 
+        error: 'Google Service Account key not configured',
+        help: 'Set GOOGLE_SA_KEY environment variable in Vercel dashboard'
+      });
     }
 
-    const serviceAccount = JSON.parse(saKeyString);
+    let serviceAccount;
+    try {
+      serviceAccount = JSON.parse(saKeyString);
+    } catch (parseError) {
+      return res.status(500).json({ 
+        error: 'Invalid GOOGLE_SA_KEY format',
+        help: 'Ensure GOOGLE_SA_KEY is valid JSON',
+        details: parseError.message
+      });
+    }
+
+    // Validate required fields
+    const requiredFields = ['client_email', 'private_key', 'project_id'];
+    for (const field of requiredFields) {
+      if (!serviceAccount[field]) {
+        return res.status(500).json({ 
+          error: `Missing required field: ${field}`,
+          help: 'Ensure your service account JSON includes all required fields'
+        });
+      }
+    }
 
     // Create JWT authentication
     const auth = new google.auth.JWT(
@@ -97,9 +120,26 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('❌ Google Drive upload error:', error);
+    
+    // Provide specific error messages based on error type
+    let helpMessage = 'Check server logs for details';
+    
+    if (error.message.includes('invalid_grant')) {
+      helpMessage = 'Service account credentials are invalid. Check your GOOGLE_SA_KEY';
+    } else if (error.message.includes('access_denied') || error.message.includes('403')) {
+      helpMessage = 'Service account lacks permissions. Share the Drive folder with the service account email';
+    } else if (error.message.includes('not found') || error.message.includes('404')) {
+      helpMessage = 'Drive folder not found. Check folder ID and permissions';
+    } else if (error.message.includes('quota')) {
+      helpMessage = 'Google Drive API quota exceeded. Try again later';
+    }
+
     return res.status(500).json({
       success: false,
       error: error.message || 'Failed to upload to Google Drive',
+      help: helpMessage,
+      serviceAccountEmail: serviceAccount?.client_email || 'unknown',
+      folderId: '1baKgd52mtYjRyvmTziIoJrzysMRhLU_U',
       details: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
