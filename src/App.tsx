@@ -53,6 +53,7 @@ export interface Order {
   tlName: string;
   memberName: string;
   subtotal: number;
+  discount: number;
   delivery: number;
   grandTotal: number;
   paymentScreenshotUrl?: string;
@@ -66,34 +67,34 @@ const PRODUCTS: Product[] = [
   // SWEETS
   {
     id: 'thekua',
-    name: 'Thekua',
+    name: 'The-Cookies Thekua',
     category: 'sweet',
     variants: [
       {
-        id: 'suji-maida',
-        name: 'Suji Maida Thekua',
+        id: 'ghee',
+        name: 'Shudh Desi Ghee Theukua',
         sizes: [
-          { size: '200g', sku: 'THEKUA-SUJI-200', price: 120 },
-          { size: '500g', sku: 'THEKUA-SUJI-500', price: 280 },
-          { size: '1kg', sku: 'THEKUA-SUJI-1000', price: 520 }
+          { size: '200g', sku: 'THEKUA-GHEE-200', price: 199 },
+          { size: '500g', sku: 'THEKUA-GHEE-500', price: 492 },
+          { size: '1kg', sku: 'THEKUA-GHEE-1000', price: 920 }
         ]
       },
       {
         id: 'refined-oil',
         name: 'Refined Oil Aata Thekua',
         sizes: [
-          { size: '200g', sku: 'THEKUA-OIL-200', price: 100 },
-          { size: '500g', sku: 'THEKUA-OIL-500', price: 240 },
-          { size: '1kg', sku: 'THEKUA-OIL-1000', price: 450 }
+          { size: '200g', sku: 'THEKUA-OIL-200', price: 189 },
+          { size: '500g', sku: 'THEKUA-OIL-500', price: 450 },
+          { size: '1kg', sku: 'THEKUA-OIL-1000', price: 900 }
         ]
       },
       {
-        id: 'ghee',
-        name: 'Shudh Desi Ghee Thekua',
+        id: 'suji-maida',
+        name: 'Suji Maida Ghee Theukua',
         sizes: [
-          { size: '200g', sku: 'THEKUA-GHEE-200', price: 160 },
-          { size: '500g', sku: 'THEKUA-GHEE-500', price: 380 },
-          { size: '1kg', sku: 'THEKUA-GHEE-1000', price: 720 }
+          { size: '200g', sku: 'THEKUA-SUJI-200', price: 189 },
+          { size: '500g', sku: 'THEKUA-SUJI-500', price: 450 },
+          { size: '1kg', sku: 'THEKUA-SUJI-1000', price: 900 }
         ]
       }
     ]
@@ -107,63 +108,63 @@ const PRODUCTS: Product[] = [
         id: 'authentic',
         name: 'Authentic ShankarPara',
         sizes: [
-          { size: '200g', sku: 'SHAKAR-AUTH-200', price: 140 },
-          { size: '500g', sku: 'SHAKAR-AUTH-500', price: 330 },
-          { size: '1kg', sku: 'SHAKAR-AUTH-1000', price: 620 }
+          { size: '200g', sku: 'SHAKAR-AUTH-200', price: 220 },
+          { size: '500g', sku: 'SHAKAR-AUTH-500', price: 520 },
+          { size: '1kg', sku: 'SHAKAR-AUTH-1000', price: 1050 }
         ]
       },
       {
         id: 'shahi',
-        name: 'Shahi ShakarPara',
+        name: 'Shahi Shakar Para',
         sizes: [
-          { size: '200g', sku: 'SHAKAR-SHAHI-200', price: 180 },
-          { size: '500g', sku: 'SHAKAR-SHAHI-500', price: 420 },
-          { size: '1kg', sku: 'SHAKAR-SHAHI-1000', price: 800 }
+          { size: '200g', sku: 'SHAKAR-SHAHI-200', price: 220 },
+          { size: '500g', sku: 'SHAKAR-SHAHI-500', price: 520 },
+          { size: '1kg', sku: 'SHAKAR-SHAHI-1000', price: 1050 }
         ]
       },
       {
         id: 'rose',
-        name: 'Rose ShakarPara',
+        name: 'Rose Shakar Para',
         sizes: [
-          { size: '200g', sku: 'SHAKAR-ROSE-200', price: 200 },
-          { size: '500g', sku: 'SHAKAR-ROSE-500', price: 480 },
-          { size: '1kg', sku: 'SHAKAR-ROSE-1000', price: 920 }
+          { size: '200g', sku: 'SHAKAR-ROSE-200', price: 220 },
+          { size: '500g', sku: 'SHAKAR-ROSE-500', price: 520 },
+          { size: '1kg', sku: 'SHAKAR-ROSE-1000', price: 1050 }
         ]
       },
       {
         id: 'elaichi',
-        name: 'Elaichi ShakarPara',
+        name: 'Elaichi Shakar Para',
         sizes: [
-          { size: '200g', sku: 'SHAKAR-ELAICHI-200', price: 190 },
-          { size: '500g', sku: 'SHAKAR-ELAICHI-500', price: 450 },
-          { size: '1kg', sku: 'SHAKAR-ELAICHI-1000', price: 860 }
+          { size: '200g', sku: 'SHAKAR-ELAICHI-200', price: 220 },
+          { size: '500g', sku: 'SHAKAR-ELAICHI-500', price: 520 },
+          { size: '1kg', sku: 'SHAKAR-ELAICHI-1000', price: 1050 }
         ]
       },
       {
         id: 'kesariya',
-        name: 'Kesariya ShakarPara',
+        name: 'Kesariya Shakar Para',
         sizes: [
           { size: '200g', sku: 'SHAKAR-KESAR-200', price: 220 },
           { size: '500g', sku: 'SHAKAR-KESAR-500', price: 520 },
-          { size: '1kg', sku: 'SHAKAR-KESAR-1000', price: 1000 }
+          { size: '1kg', sku: 'SHAKAR-KESAR-1000', price: 1050 }
         ]
       },
       {
         id: 'dalchini',
         name: 'Dalchini Shakarpara',
         sizes: [
-          { size: '200g', sku: 'SHAKAR-DALCHINI-200', price: 170 },
-          { size: '500g', sku: 'SHAKAR-DALCHINI-500', price: 400 },
-          { size: '1kg', sku: 'SHAKAR-DALCHINI-1000', price: 760 }
+          { size: '200g', sku: 'SHAKAR-DALCHINI-200', price: 220 },
+          { size: '500g', sku: 'SHAKAR-DALCHINI-500', price: 520 },
+          { size: '1kg', sku: 'SHAKAR-DALCHINI-1000', price: 1050 }
         ]
       },
       {
         id: 'chocolate',
         name: 'Chocolate Shakarpara',
         sizes: [
-          { size: '200g', sku: 'SHAKAR-CHOCO-200', price: 240 },
-          { size: '500g', sku: 'SHAKAR-CHOCO-500', price: 560 },
-          { size: '1kg', sku: 'SHAKAR-CHOCO-1000', price: 1080 }
+          { size: '200g', sku: 'SHAKAR-CHOCO-200', price: 220 },
+          { size: '500g', sku: 'SHAKAR-CHOCO-500', price: 520 },
+          { size: '1kg', sku: 'SHAKAR-CHOCO-1000', price: 1050 }
         ]
       }
     ]
@@ -177,18 +178,18 @@ const PRODUCTS: Product[] = [
         id: 'authentic',
         name: 'Authentic GAJA',
         sizes: [
-          { size: '200g', sku: 'GAJA-AUTH-200', price: 160 },
-          { size: '500g', sku: 'GAJA-AUTH-500', price: 380 },
-          { size: '1kg', sku: 'GAJA-AUTH-1000', price: 720 }
+          { size: '200g', sku: 'GAJA-AUTH-200', price: 199 },
+          { size: '500g', sku: 'GAJA-AUTH-500', price: 450 },
+          { size: '1kg', sku: 'GAJA-AUTH-1000', price: 850 }
         ]
       },
       {
         id: 'mini',
         name: 'Mini Gaja',
         sizes: [
-          { size: '200g', sku: 'GAJA-MINI-200', price: 140 },
-          { size: '500g', sku: 'GAJA-MINI-500', price: 330 },
-          { size: '1kg', sku: 'GAJA-MINI-1000', price: 620 }
+          { size: '200g', sku: 'GAJA-MINI-200', price: 199 },
+          { size: '500g', sku: 'GAJA-MINI-500', price: 450 },
+          { size: '1kg', sku: 'GAJA-MINI-1000', price: 850 }
         ]
       }
     ]
@@ -202,18 +203,18 @@ const PRODUCTS: Product[] = [
         id: 'big',
         name: 'Authentic Big Anarsa',
         sizes: [
-          { size: '200g', sku: 'ANARSA-BIG-200', price: 180 },
-          { size: '500g', sku: 'ANARSA-BIG-500', price: 420 },
-          { size: '1kg', sku: 'ANARSA-BIG-1000', price: 800 }
+          { size: '200g', sku: 'ANARSA-BIG-200', price: 270 },
+          { size: '500g', sku: 'ANARSA-BIG-500', price: 590 },
+          { size: '1kg', sku: 'ANARSA-BIG-1000', price: 1050 }
         ]
       },
       {
         id: 'mini',
         name: 'Anarsa Mini Balls',
         sizes: [
-          { size: '200g', sku: 'ANARSA-MINI-200', price: 160 },
-          { size: '500g', sku: 'ANARSA-MINI-500', price: 380 },
-          { size: '1kg', sku: 'ANARSA-MINI-1000', price: 720 }
+          { size: '200g', sku: 'ANARSA-MINI-200', price: 270 },
+          { size: '500g', sku: 'ANARSA-MINI-500', price: 590 },
+          { size: '1kg', sku: 'ANARSA-MINI-1000', price: 1050 }
         ]
       }
     ]
@@ -227,18 +228,18 @@ const PRODUCTS: Product[] = [
         id: 'regular',
         name: 'Khaja',
         sizes: [
-          { size: '200g', sku: 'KHAJA-REG-200', price: 150 },
-          { size: '500g', sku: 'KHAJA-REG-500', price: 350 },
-          { size: '1kg', sku: 'KHAJA-REG-1000', price: 660 }
+          { size: '200g', sku: 'KHAJA-REG-200', price: 270 },
+          { size: '500g', sku: 'KHAJA-REG-500', price: 590 },
+          { size: '1kg', sku: 'KHAJA-REG-1000', price: 1050 }
         ]
       },
       {
         id: 'mini',
         name: 'Khaja Mini',
         sizes: [
-          { size: '200g', sku: 'KHAJA-MINI-200', price: 130 },
-          { size: '500g', sku: 'KHAJA-MINI-500', price: 300 },
-          { size: '1kg', sku: 'KHAJA-MINI-1000', price: 580 }
+          { size: '200g', sku: 'KHAJA-MINI-200', price: 270 },
+          { size: '500g', sku: 'KHAJA-MINI-500', price: 590 },
+          { size: '1kg', sku: 'KHAJA-MINI-1000', price: 1050 }
         ]
       }
     ]
@@ -250,16 +251,16 @@ const PRODUCTS: Product[] = [
     variants: [
       {
         id: 'rajgira',
-        name: 'Rajgira Lai (sweet)',
+        name: 'Rajgira Lai',
         sizes: [
-          { size: '200g', sku: 'LAI-RAJGIRA-200', price: 120 },
-          { size: '500g', sku: 'LAI-RAJGIRA-500', price: 280 },
-          { size: '1kg', sku: 'LAI-RAJGIRA-1000', price: 520 }
+          { size: '200g', sku: 'LAI-RAJGIRA-200', price: 199 },
+          { size: '500g', sku: 'LAI-RAJGIRA-500', price: 450 },
+          { size: '1kg', sku: 'LAI-RAJGIRA-1000', price: 820 }
         ]
       }
     ]
   },
-  // NAMKEEN
+  // SNACKS
   {
     id: 'namakpara',
     name: 'Namakpara',
@@ -269,9 +270,9 @@ const PRODUCTS: Product[] = [
         id: 'classic',
         name: 'Namakpara',
         sizes: [
-          { size: '200g', sku: 'NAMAK-CLASSIC-200', price: 80 },
-          { size: '500g', sku: 'NAMAK-CLASSIC-500', price: 190 },
-          { size: '1kg', sku: 'NAMAK-CLASSIC-1000', price: 360 }
+          { size: '200g', sku: 'NAMAK-CLASSIC-200', price: 150 },
+          { size: '500g', sku: 'NAMAK-CLASSIC-500', price: 270 },
+          { size: '1kg', sku: 'NAMAK-CLASSIC-1000', price: 499 }
         ]
       }
     ]
@@ -285,18 +286,18 @@ const PRODUCTS: Product[] = [
         id: 'masoor',
         name: 'Dalmoth Masoor',
         sizes: [
-          { size: '200g', sku: 'DALMOTH-MASOOR-200', price: 90 },
-          { size: '500g', sku: 'DALMOTH-MASOOR-500', price: 210 },
-          { size: '1kg', sku: 'DALMOTH-MASOOR-1000', price: 400 }
+          { size: '200g', sku: 'DALMOTH-MASOOR-200', price: 150 },
+          { size: '500g', sku: 'DALMOTH-MASOOR-500', price: 270 },
+          { size: '1kg', sku: 'DALMOTH-MASOOR-1000', price: 499 }
         ]
       },
       {
         id: 'moong',
         name: 'Dalmoth Moong',
         sizes: [
-          { size: '200g', sku: 'DALMOTH-MOONG-200', price: 95 },
-          { size: '500g', sku: 'DALMOTH-MOONG-500', price: 220 },
-          { size: '1kg', sku: 'DALMOTH-MOONG-1000', price: 420 }
+          { size: '200g', sku: 'DALMOTH-MOONG-200', price: 150 },
+          { size: '500g', sku: 'DALMOTH-MOONG-500', price: 270 },
+          { size: '1kg', sku: 'DALMOTH-MOONG-1000', price: 499 }
         ]
       }
     ]
@@ -310,9 +311,9 @@ const PRODUCTS: Product[] = [
         id: 'roasted',
         name: 'Roasted',
         sizes: [
-          { size: '200g', sku: 'CHANACHUR-ROASTED-200', price: 85 },
-          { size: '500g', sku: 'CHANACHUR-ROASTED-500', price: 200 },
-          { size: '1kg', sku: 'CHANACHUR-ROASTED-1000', price: 380 }
+          { size: '200g', sku: 'CHANACHUR-ROASTED-200', price: 150 },
+          { size: '500g', sku: 'CHANACHUR-ROASTED-500', price: 270 },
+          { size: '1kg', sku: 'CHANACHUR-ROASTED-1000', price: 499 }
         ]
       }
     ]
@@ -324,11 +325,11 @@ const PRODUCTS: Product[] = [
     variants: [
       {
         id: 'millet',
-        name: 'Millet Roasted (Rajgira, etc.)',
+        name: 'Millet Roasted (Rajgira, etc)',
         sizes: [
-          { size: '200g', sku: 'HEALTHY-MILLET-200', price: 100 },
-          { size: '500g', sku: 'HEALTHY-MILLET-500', price: 240 },
-          { size: '1kg', sku: 'HEALTHY-MILLET-1000', price: 460 }
+          { size: '200g', sku: 'HEALTHY-MILLET-200', price: 220 },
+          { size: '500g', sku: 'HEALTHY-MILLET-500', price: 499 },
+          { size: '1kg', sku: 'HEALTHY-MILLET-1000', price: 900 }
         ]
       }
     ]
@@ -343,6 +344,7 @@ export const CartContext = React.createContext<{
   removeFromCart: (index: number) => void;
   clearCart: () => void;
   subtotal: number;
+  discount: number;
   delivery: number;
   grandTotal: number;
 }>({
@@ -352,6 +354,7 @@ export const CartContext = React.createContext<{
   removeFromCart: () => {},
   clearCart: () => {},
   subtotal: 0,
+  discount: 0,
   delivery: 0,
   grandTotal: 0
 });
@@ -403,8 +406,25 @@ const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   };
 
   const subtotal = cart.reduce((sum, item) => sum + item.lineTotal, 0);
-  const delivery = subtotal >= 1000 ? 0 : 100;
-  const grandTotal = subtotal + delivery;
+  
+  // Calculate discount based on order value
+  let discount = 0;
+  let deliveryFee = 79;
+  
+  if (subtotal >= 2000) {
+    discount = Math.round(subtotal * 0.15); // 15% discount
+    deliveryFee = 0; // No delivery fee
+  } else if (subtotal >= 1000) {
+    discount = Math.round(subtotal * 0.10); // 10% discount
+    deliveryFee = 0; // No delivery fee
+  } else if (subtotal >= 500) {
+    discount = Math.round(subtotal * 0.05); // 5% discount
+    deliveryFee = 79; // Delivery fee applies
+  }
+  
+  const discountedSubtotal = subtotal - discount;
+  const delivery = deliveryFee;
+  const grandTotal = discountedSubtotal + delivery;
 
   return (
     <CartContext.Provider value={{
@@ -414,6 +434,7 @@ const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       removeFromCart,
       clearCart,
       subtotal,
+      discount,
       delivery,
       grandTotal
     }}>
@@ -520,7 +541,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void; onCheckout: () => v
   onCheckout,
   isFixed = true
 }) => {
-  const { cart, updateQuantity, removeFromCart, subtotal, delivery, grandTotal } = React.useContext(CartContext);
+  const { cart, updateQuantity, removeFromCart, subtotal, discount, delivery, grandTotal } = React.useContext(CartContext);
 
   const cartClass = isFixed 
     ? `cart-drawer ${isOpen ? 'open' : ''}` 
@@ -592,6 +613,12 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void; onCheckout: () => v
                 <span>Subtotal:</span>
                 <span>₹{subtotal}</span>
               </div>
+              {discount > 0 && (
+                <div className="summary-row discount-row">
+                  <span>Discount ({subtotal >= 2000 ? '15' : subtotal >= 1000 ? '10' : '5'}%):</span>
+                  <span className="discount-amount">-₹{discount}</span>
+                </div>
+              )}
               <div className="summary-row">
                 <span>Delivery:</span>
                 <span className={delivery === 0 ? 'free-delivery' : ''}>
@@ -602,9 +629,24 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void; onCheckout: () => v
                 <span>Total:</span>
                 <span>₹{grandTotal}</span>
               </div>
-              {subtotal < 1000 && (
+              {subtotal < 500 && (
                 <div className="delivery-notice">
-                  <small>Add ₹{1000 - subtotal} more for FREE delivery! 🚚</small>
+                  <small>🎁 Add ₹{500 - subtotal} more for 5% discount + ₹79 delivery!</small>
+                </div>
+              )}
+              {subtotal >= 500 && subtotal < 1000 && (
+                <div className="delivery-notice">
+                  <small>🚚 Add ₹{1000 - subtotal} more for 10% discount + FREE delivery!</small>
+                </div>
+              )}
+              {subtotal >= 1000 && subtotal < 2000 && (
+                <div className="delivery-notice">
+                  <small>🎉 Add ₹{2000 - subtotal} more for 15% discount!</small>
+                </div>
+              )}
+              {subtotal >= 1000 && (
+                <div className="delivery-notice gift-notice">
+                  <small>🎁 Free Gift included with your order!</small>
                 </div>
               )}
             </div>

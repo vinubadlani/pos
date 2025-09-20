@@ -5,38 +5,108 @@ const ProductsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'sweet' | 'namkeen'>('all');
 
-  // Sample product data - in a real app this would come from an API
+  // Sample product data - matches the main App.tsx catalog
   const products = [
     {
       id: 'thekua',
-      name: 'Thekua',
+      name: 'The-Cookies Thekua',
       category: 'sweet' as const,
       variants: [
         {
-          id: 'shahi',
-          name: 'Shahi Thekua',
-          sizes: [
-            { size: '200g' as const, sku: 'THEKUA-SHAHI-200', price: 150 },
-            { size: '500g' as const, sku: 'THEKUA-SHAHI-500', price: 350 },
-            { size: '1kg' as const, sku: 'THEKUA-SHAHI-1000', price: 650 }
-          ]
-        },
-        {
-          id: 'suji',
-          name: 'Suji Maida Thekua',
-          sizes: [
-            { size: '200g' as const, sku: 'THEKUA-SUJI-200', price: 120 },
-            { size: '500g' as const, sku: 'THEKUA-SUJI-500', price: 280 },
-            { size: '1kg' as const, sku: 'THEKUA-SUJI-1000', price: 520 }
-          ]
-        },
-        {
           id: 'ghee',
-          name: 'Shudh Desi Ghee Thekua',
+          name: 'Shudh Desi Ghee Theukua',
           sizes: [
-            { size: '200g' as const, sku: 'THEKUA-GHEE-200', price: 140 },
-            { size: '500g' as const, sku: 'THEKUA-GHEE-500', price: 320 },
-            { size: '1kg' as const, sku: 'THEKUA-GHEE-1000', price: 600 }
+            { size: '200g' as const, sku: 'THEKUA-GHEE-200', price: 199 },
+            { size: '500g' as const, sku: 'THEKUA-GHEE-500', price: 492 },
+            { size: '1kg' as const, sku: 'THEKUA-GHEE-1000', price: 920 }
+          ]
+        },
+        {
+          id: 'refined-oil',
+          name: 'Refined Oil Aata Thekua',
+          sizes: [
+            { size: '200g' as const, sku: 'THEKUA-OIL-200', price: 189 },
+            { size: '500g' as const, sku: 'THEKUA-OIL-500', price: 450 },
+            { size: '1kg' as const, sku: 'THEKUA-OIL-1000', price: 900 }
+          ]
+        },
+        {
+          id: 'suji-maida',
+          name: 'Suji Maida Ghee Theukua',
+          sizes: [
+            { size: '200g' as const, sku: 'THEKUA-SUJI-200', price: 189 },
+            { size: '500g' as const, sku: 'THEKUA-SUJI-500', price: 450 },
+            { size: '1kg' as const, sku: 'THEKUA-SUJI-1000', price: 900 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'shakarpara',
+      name: 'Shakarpara',
+      category: 'sweet' as const,
+      variants: [
+        {
+          id: 'authentic',
+          name: 'Authentic ShankarPara',
+          sizes: [
+            { size: '200g' as const, sku: 'SHAKAR-AUTH-200', price: 220 },
+            { size: '500g' as const, sku: 'SHAKAR-AUTH-500', price: 520 },
+            { size: '1kg' as const, sku: 'SHAKAR-AUTH-1000', price: 1050 }
+          ]
+        },
+        {
+          id: 'shahi',
+          name: 'Shahi Shakar Para',
+          sizes: [
+            { size: '200g' as const, sku: 'SHAKAR-SHAHI-200', price: 220 },
+            { size: '500g' as const, sku: 'SHAKAR-SHAHI-500', price: 520 },
+            { size: '1kg' as const, sku: 'SHAKAR-SHAHI-1000', price: 1050 }
+          ]
+        },
+        {
+          id: 'rose',
+          name: 'Rose Shakar Para',
+          sizes: [
+            { size: '200g' as const, sku: 'SHAKAR-ROSE-200', price: 220 },
+            { size: '500g' as const, sku: 'SHAKAR-ROSE-500', price: 520 },
+            { size: '1kg' as const, sku: 'SHAKAR-ROSE-1000', price: 1050 }
+          ]
+        },
+        {
+          id: 'elaichi',
+          name: 'Elaichi Shakar Para',
+          sizes: [
+            { size: '200g' as const, sku: 'SHAKAR-ELAICHI-200', price: 220 },
+            { size: '500g' as const, sku: 'SHAKAR-ELAICHI-500', price: 520 },
+            { size: '1kg' as const, sku: 'SHAKAR-ELAICHI-1000', price: 1050 }
+          ]
+        },
+        {
+          id: 'kesariya',
+          name: 'Kesariya Shakar Para',
+          sizes: [
+            { size: '200g' as const, sku: 'SHAKAR-KESAR-200', price: 220 },
+            { size: '500g' as const, sku: 'SHAKAR-KESAR-500', price: 520 },
+            { size: '1kg' as const, sku: 'SHAKAR-KESAR-1000', price: 1050 }
+          ]
+        },
+        {
+          id: 'dalchini',
+          name: 'Dalchini Shakarpara',
+          sizes: [
+            { size: '200g' as const, sku: 'SHAKAR-DALCHINI-200', price: 220 },
+            { size: '500g' as const, sku: 'SHAKAR-DALCHINI-500', price: 520 },
+            { size: '1kg' as const, sku: 'SHAKAR-DALCHINI-1000', price: 1050 }
+          ]
+        },
+        {
+          id: 'chocolate',
+          name: 'Chocolate Shakarpara',
+          sizes: [
+            { size: '200g' as const, sku: 'SHAKAR-CHOCO-200', price: 220 },
+            { size: '500g' as const, sku: 'SHAKAR-CHOCO-500', price: 520 },
+            { size: '1kg' as const, sku: 'SHAKAR-CHOCO-1000', price: 1050 }
           ]
         }
       ]
@@ -50,9 +120,84 @@ const ProductsPage: React.FC = () => {
           id: 'authentic',
           name: 'Authentic GAJA',
           sizes: [
-            { size: '200g' as const, sku: 'GAJA-AUTH-200', price: 160 },
-            { size: '500g' as const, sku: 'GAJA-AUTH-500', price: 380 },
-            { size: '1kg' as const, sku: 'GAJA-AUTH-1000', price: 720 }
+            { size: '200g' as const, sku: 'GAJA-AUTH-200', price: 199 },
+            { size: '500g' as const, sku: 'GAJA-AUTH-500', price: 450 },
+            { size: '1kg' as const, sku: 'GAJA-AUTH-1000', price: 850 }
+          ]
+        },
+        {
+          id: 'mini',
+          name: 'Mini Gaja',
+          sizes: [
+            { size: '200g' as const, sku: 'GAJA-MINI-200', price: 199 },
+            { size: '500g' as const, sku: 'GAJA-MINI-500', price: 450 },
+            { size: '1kg' as const, sku: 'GAJA-MINI-1000', price: 850 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'anarsa',
+      name: 'Anarsa',
+      category: 'sweet' as const,
+      variants: [
+        {
+          id: 'big',
+          name: 'Authentic Big Anarsa',
+          sizes: [
+            { size: '200g' as const, sku: 'ANARSA-BIG-200', price: 270 },
+            { size: '500g' as const, sku: 'ANARSA-BIG-500', price: 590 },
+            { size: '1kg' as const, sku: 'ANARSA-BIG-1000', price: 1050 }
+          ]
+        },
+        {
+          id: 'mini',
+          name: 'Anarsa Mini Balls',
+          sizes: [
+            { size: '200g' as const, sku: 'ANARSA-MINI-200', price: 270 },
+            { size: '500g' as const, sku: 'ANARSA-MINI-500', price: 590 },
+            { size: '1kg' as const, sku: 'ANARSA-MINI-1000', price: 1050 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'khaja',
+      name: 'Khaja',
+      category: 'sweet' as const,
+      variants: [
+        {
+          id: 'regular',
+          name: 'Khaja',
+          sizes: [
+            { size: '200g' as const, sku: 'KHAJA-REG-200', price: 270 },
+            { size: '500g' as const, sku: 'KHAJA-REG-500', price: 590 },
+            { size: '1kg' as const, sku: 'KHAJA-REG-1000', price: 1050 }
+          ]
+        },
+        {
+          id: 'mini',
+          name: 'Khaja Mini',
+          sizes: [
+            { size: '200g' as const, sku: 'KHAJA-MINI-200', price: 270 },
+            { size: '500g' as const, sku: 'KHAJA-MINI-500', price: 590 },
+            { size: '1kg' as const, sku: 'KHAJA-MINI-1000', price: 1050 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'lai',
+      name: 'Lai',
+      category: 'sweet' as const,
+      variants: [
+        {
+          id: 'rajgira',
+          name: 'Rajgira Lai',
+          sizes: [
+            { size: '200g' as const, sku: 'LAI-RAJGIRA-200', price: 199 },
+            { size: '500g' as const, sku: 'LAI-RAJGIRA-500', price: 450 },
+            { size: '1kg' as const, sku: 'LAI-RAJGIRA-1000', price: 820 }
           ]
         }
       ]
@@ -64,36 +209,68 @@ const ProductsPage: React.FC = () => {
       variants: [
         {
           id: 'classic',
-          name: 'Classic Namakpara',
+          name: 'Namakpara',
           sizes: [
-            { size: '200g' as const, sku: 'NAMAK-CLASSIC-200', price: 80 },
-            { size: '500g' as const, sku: 'NAMAK-CLASSIC-500', price: 190 },
-            { size: '1kg' as const, sku: 'NAMAK-CLASSIC-1000', price: 360 }
-          ]
-        },
-        {
-          id: 'spicy',
-          name: 'Spicy Namakpara',
-          sizes: [
-            { size: '200g' as const, sku: 'NAMAK-SPICY-200', price: 85 },
-            { size: '500g' as const, sku: 'NAMAK-SPICY-500', price: 200 },
-            { size: '1kg' as const, sku: 'NAMAK-SPICY-1000', price: 380 }
+            { size: '200g' as const, sku: 'NAMAK-CLASSIC-200', price: 150 },
+            { size: '500g' as const, sku: 'NAMAK-CLASSIC-500', price: 270 },
+            { size: '1kg' as const, sku: 'NAMAK-CLASSIC-1000', price: 499 }
           ]
         }
       ]
     },
     {
-      id: 'murukku',
-      name: 'Murukku',
+      id: 'dalmoth',
+      name: 'Dalmoth',
       category: 'namkeen' as const,
       variants: [
         {
-          id: 'traditional',
-          name: 'Traditional Murukku',
+          id: 'masoor',
+          name: 'Dalmoth Masoor',
           sizes: [
-            { size: '200g' as const, sku: 'MURUKKU-TRAD-200', price: 90 },
-            { size: '500g' as const, sku: 'MURUKKU-TRAD-500', price: 210 },
-            { size: '1kg' as const, sku: 'MURUKKU-TRAD-1000', price: 400 }
+            { size: '200g' as const, sku: 'DALMOTH-MASOOR-200', price: 150 },
+            { size: '500g' as const, sku: 'DALMOTH-MASOOR-500', price: 270 },
+            { size: '1kg' as const, sku: 'DALMOTH-MASOOR-1000', price: 499 }
+          ]
+        },
+        {
+          id: 'moong',
+          name: 'Dalmoth Moong',
+          sizes: [
+            { size: '200g' as const, sku: 'DALMOTH-MOONG-200', price: 150 },
+            { size: '500g' as const, sku: 'DALMOTH-MOONG-500', price: 270 },
+            { size: '1kg' as const, sku: 'DALMOTH-MOONG-1000', price: 499 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'chanachur',
+      name: 'Chanachur',
+      category: 'namkeen' as const,
+      variants: [
+        {
+          id: 'roasted',
+          name: 'Roasted',
+          sizes: [
+            { size: '200g' as const, sku: 'CHANACHUR-ROASTED-200', price: 150 },
+            { size: '500g' as const, sku: 'CHANACHUR-ROASTED-500', price: 270 },
+            { size: '1kg' as const, sku: 'CHANACHUR-ROASTED-1000', price: 499 }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'healthy-mixture',
+      name: 'Healthy Mixture',
+      category: 'namkeen' as const,
+      variants: [
+        {
+          id: 'millet',
+          name: 'Millet Roasted (Rajgira, etc)',
+          sizes: [
+            { size: '200g' as const, sku: 'HEALTHY-MILLET-200', price: 220 },
+            { size: '500g' as const, sku: 'HEALTHY-MILLET-500', price: 499 },
+            { size: '1kg' as const, sku: 'HEALTHY-MILLET-1000', price: 900 }
           ]
         }
       ]

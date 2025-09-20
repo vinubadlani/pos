@@ -111,6 +111,12 @@ const InvoicePage: React.FC = () => {
                 <td>Subtotal:</td>
                 <td className="text-right">₹{order.subtotal}</td>
               </tr>
+              {order.discount > 0 && (
+                <tr className="discount-row">
+                  <td>Discount ({order.subtotal >= 2000 ? '15' : order.subtotal >= 1000 ? '10' : '5'}%):</td>
+                  <td className="text-right discount-amount">-₹{order.discount}</td>
+                </tr>
+              )}
               <tr>
                 <td>Delivery Fee:</td>
                 <td className="text-right">{order.delivery === 0 ? 'Free' : `₹${order.delivery}`}</td>
@@ -142,6 +148,17 @@ const InvoicePage: React.FC = () => {
             <p>{order.orderNote}</p>
           </div>
         )}
+
+        {/* Shipping Disclaimer */}
+        <div className="disclaimer-section" style={{ marginTop: '24px' }}>
+          <div className="disclaimer-box">
+            <p className="disclaimer-text">
+              <strong>📦 Shipping Information:</strong><br />
+              Your product will be shipped to you within 24 to 48 working hours. 
+              Tracking ID will be shared with you soon after dispatch.
+            </p>
+          </div>
+        </div>
 
         {/* Footer */}
         <div className="invoice-footer">

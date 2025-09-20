@@ -13,7 +13,7 @@ const log = (...args: any[]) => {
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
-  const { cart, clearCart, subtotal, delivery, grandTotal } = React.useContext(CartContext);
+  const { cart, clearCart, subtotal, discount, delivery, grandTotal } = React.useContext(CartContext);
   
   const [formData, setFormData] = useState({
     customerName: '',
@@ -137,6 +137,7 @@ const CheckoutPage: React.FC = () => {
         tlName: formData.tlName,
         memberName: formData.memberName,
         subtotal,
+        discount,
         delivery,
         grandTotal,
         paymentScreenshotUrl: paymentScreenshotUrl || (paymentScreenshot ? URL.createObjectURL(paymentScreenshot) : undefined),
@@ -168,6 +169,7 @@ const CheckoutPage: React.FC = () => {
         tlName: formData.tlName,
         memberName: formData.memberName,
         subtotal: subtotal.toString(),
+        discount: discount.toString(),
         deliveryFee: delivery.toString(),
         grandTotal: grandTotal.toString(),
         paymentMethod: 'Payment Screenshot',
@@ -363,6 +365,12 @@ const CheckoutPage: React.FC = () => {
               <span>Subtotal:</span>
               <span>₹{subtotal}</span>
             </div>
+            {discount > 0 && (
+              <div className="total-row discount-row">
+                <span>Discount ({subtotal >= 2000 ? '15' : subtotal >= 1000 ? '10' : '5'}%):</span>
+                <span className="discount-amount">-₹{discount}</span>
+              </div>
+            )}
             <div className="total-row">
               <span>Delivery:</span>
               <span>{delivery === 0 ? 'Free' : `₹${delivery}`}</span>
@@ -371,9 +379,24 @@ const CheckoutPage: React.FC = () => {
               <span>Total:</span>
               <span>₹{grandTotal}</span>
             </div>
-            {subtotal < 1000 && (
+            {subtotal >= 1000 && (
+              <div className="delivery-notice gift-notice">
+                🎁 Free Gift included with your order!
+              </div>
+            )}
+            {subtotal < 500 && (
               <div className="delivery-notice">
-                Add ₹{1000 - subtotal} more for free delivery!
+                Add ₹{500 - subtotal} more for 5% discount!
+              </div>
+            )}
+            {subtotal >= 500 && subtotal < 1000 && (
+              <div className="delivery-notice">
+                Add ₹{1000 - subtotal} more for 10% discount + free delivery!
+              </div>
+            )}
+            {subtotal >= 1000 && subtotal < 2000 && (
+              <div className="delivery-notice">
+                Add ₹{2000 - subtotal} more for 15% discount!
               </div>
             )}
           </div>
@@ -510,6 +533,20 @@ const CheckoutPage: React.FC = () => {
                 rows={3}
                 placeholder="Any special delivery instructions or notes"
               />
+            </div>
+
+            {/* Disclaimer */}
+            <div className="disclaimer-section">
+              <div className="disclaimer-box">
+                <p className="disclaimer-text">
+                  <strong>📦 Shipping Information:</strong><br />
+                  Your product will be shipped to you within 24 to 48 working hours. 
+                  Tracking ID will be shared with you soon after dispatch.
+                </p>
+                <p className="terms-text">
+                  By placing this order, you agree to our terms and conditions.
+                </p>
+              </div>
             </div>
 
             <div className="form-actions">
