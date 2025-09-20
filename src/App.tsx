@@ -15,12 +15,14 @@ export interface Product {
   id: string;
   name: string;
   category: 'sweet' | 'namkeen';
+  description?: string;
   variants: ProductVariant[];
 }
 
 export interface ProductVariant {
   id: string;
   name: string;
+  description?: string;
   sizes: ProductSize[];
 }
 
