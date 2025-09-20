@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { uploadToGoogleDrive, storeImageLocally } from '../utils/driveUpload';
+import { uploadImageToVercel } from '../utils/imageUpload';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { CartContext, type Order } from '../App';
@@ -76,39 +76,25 @@ const CheckoutPage: React.FC = () => {
     }
   };
 
-  // Function to process image for Google Drive hosting
+  // Function to process image for Vercel Storage hosting
   const uploadImageToCloud = async (imageFile: File): Promise<string | null> => {
     try {
-      log('🔄 Uploading image to Google Drive...');
+      log('🔄 Uploading image to Vercel Storage...');
       setIsUploadingImage(true);
       
-      // Use our Google Drive upload utility
-      const result = await uploadToGoogleDrive(imageFile);
+      // Use our Vercel Storage upload utility
+      const result = await uploadImageToVercel(imageFile);
       
       if (result.success && result.url) {
-        log('✅ Image uploaded successfully to Google Drive');
+        log('✅ Image uploaded successfully to Vercel Storage');
         return result.url;
       } else {
-        console.warn('⚠️ Google Drive upload failed:', result.error);
-        
-        // Create local backup
-        const orderNumber = generateOrderNumber();
-        const localUrl = await storeImageLocally(imageFile, orderNumber);
-        log('💾 Image stored locally as backup');
-        return localUrl;
+        console.warn('⚠️ Vercel Storage upload failed:', result.error);
+        return `Upload failed - file: ${imageFile.name}`;
       }
     } catch (error) {
       console.error('❌ Image upload failed:', error);
-      try {
-        // Create local backup
-        const orderNumber = generateOrderNumber();
-        const localUrl = await storeImageLocally(imageFile, orderNumber);
-        log('💾 Image stored locally as fallback');
-        return localUrl;
-      } catch (backupError) {
-        console.error('❌ Local backup also failed:', backupError);
-        return `Upload failed - file: ${imageFile.name}`;
-      }
+      return `Upload failed - file: ${imageFile.name}`;
     } finally {
       setIsUploadingImage(false);
     }
@@ -503,13 +489,13 @@ const CheckoutPage: React.FC = () => {
                   />
                   <p className="payment-filename">{paymentScreenshot.name}</p>
                   <p className="payment-info">
-                    📤 Image will be uploaded to Google Drive for public access in sheets
+                    📤 Image will be uploaded to Vercel Storage for public access in sheets
                   </p>
                 </div>
               )}
               {isUploadingImage && (
                 <div className="upload-progress">
-                  🔄 Uploading to Google Drive...
+                  🔄 Uploading to Vercel Storage...
                 </div>
               )}
             </div>
