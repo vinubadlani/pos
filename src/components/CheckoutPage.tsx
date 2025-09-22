@@ -36,11 +36,14 @@ const CheckoutPage: React.FC = () => {
     if (!formData.customerName.trim()) newErrors.customerName = 'Customer name is required';
     if (!formData.address.trim()) newErrors.address = 'Address is required';
     if (!formData.pincode.trim()) newErrors.pincode = 'Pincode is required';
-    else if (!/^\d{6}$/.test(formData.pincode)) newErrors.pincode = 'Pincode must be 6 digits';
+    else if (!/^[0-9]{6}$/.test(formData.pincode)) newErrors.pincode = 'Pincode must be 6 digits';
     if (!formData.contact.trim()) newErrors.contact = 'Contact number is required';
-    else if (!/^\d{10}$/.test(formData.contact)) newErrors.contact = 'Contact must be 10 digits';
+    else if (!/^[0-9]{10}$/.test(formData.contact)) newErrors.contact = 'Contact must be 10 digits';
     if (!formData.tlName.trim()) newErrors.tlName = 'TL name is required';
     if (!formData.memberName.trim()) newErrors.memberName = 'Member name is required';
+
+    // Make payment screenshot mandatory
+    if (!paymentScreenshot) newErrors.paymentScreenshot = 'Payment screenshot is required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -71,6 +74,8 @@ const CheckoutPage: React.FC = () => {
         return;
       }
       setPaymentScreenshot(file);
+      // Clear any previous file error
+      if (errors.paymentScreenshot) setErrors(prev => ({ ...prev, paymentScreenshot: '' }));
     } else if (file) {
       alert('Please select a valid image file');
     }
@@ -495,14 +500,15 @@ const CheckoutPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Payment Screenshot</label>
+              <label className="form-label">Payment Screenshot * (required)</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="form-control file-input"
+                className={`form-control file-input ${errors.paymentScreenshot ? 'error' : ''}`}
                 disabled={isSubmitting || isUploadingImage}
               />
+              {errors.paymentScreenshot && <div className="error-message">{errors.paymentScreenshot}</div>}
               {paymentScreenshot && (
                 <div className="payment-preview">
                   <img 
