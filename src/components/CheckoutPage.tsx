@@ -36,13 +36,12 @@ const CheckoutPage: React.FC = () => {
     if (!formData.customerName.trim()) newErrors.customerName = 'Customer name is required';
     if (!formData.address.trim()) newErrors.address = 'Address is required';
     if (!formData.pincode.trim()) newErrors.pincode = 'Pincode is required';
-    else if (!/^[0-9]{6}$/.test(formData.pincode)) newErrors.pincode = 'Pincode must be 6 digits';
+    else if (!/^\d{6}$/.test(formData.pincode)) newErrors.pincode = 'Pincode must be 6 digits';
     if (!formData.contact.trim()) newErrors.contact = 'Contact number is required';
-    else if (!/^[0-9]{10}$/.test(formData.contact)) newErrors.contact = 'Contact must be 10 digits';
+    else if (!/^\d{10}$/.test(formData.contact)) newErrors.contact = 'Contact must be 10 digits';
     if (!formData.tlName.trim()) newErrors.tlName = 'TL name is required';
     if (!formData.memberName.trim()) newErrors.memberName = 'Member name is required';
-
-    // Make payment screenshot mandatory
+     // Make payment screenshot mandatory
     if (!paymentScreenshot) newErrors.paymentScreenshot = 'Payment screenshot is required';
     
     setErrors(newErrors);
@@ -500,15 +499,14 @@ const CheckoutPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Payment Screenshot * (required)</label>
+              <label className="form-label">Payment Screenshot * (required) </label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className={`form-control file-input ${errors.paymentScreenshot ? 'error' : ''}`}
+                className="form-control file-input"
                 disabled={isSubmitting || isUploadingImage}
               />
-              {errors.paymentScreenshot && <div className="error-message">{errors.paymentScreenshot}</div>}
               {paymentScreenshot && (
                 <div className="payment-preview">
                   <img 
