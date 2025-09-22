@@ -89,9 +89,13 @@ const CheckoutPage: React.FC = () => {
       // Use our Vercel Storage upload utility
       const result = await uploadImageToVercel(imageFile);
       
-      if (result.success && result.url) {
+      if (result.success && result.customUrl) {
         log('✅ Image uploaded successfully to Vercel Storage');
-        return result.url;
+        log('📊 Compression ratio:', result.compressionRatio);
+        log('🔗 Custom URL for sheets:', result.customUrl);
+        
+        // Return the custom URL format for use in Google Sheets
+        return result.customUrl;
       } else {
         console.warn('⚠️ Vercel Storage upload failed:', result.error);
         return `Upload failed - file: ${imageFile.name}`;
@@ -516,13 +520,13 @@ const CheckoutPage: React.FC = () => {
                   />
                   <p className="payment-filename">{paymentScreenshot.name}</p>
                   <p className="payment-info">
-                    📤 Image will be uploaded to Vercel Storage for public access in sheets
+                    📤 Image will be compressed and uploaded to Vercel Storage for public access in sheets
                   </p>
                 </div>
               )}
               {isUploadingImage && (
                 <div className="upload-progress">
-                  🔄 Uploading to Vercel Storage...
+                  🔄 Compressing and uploading to Vercel Storage...
                 </div>
               )}
             </div>
