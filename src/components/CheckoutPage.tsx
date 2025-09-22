@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { uploadImageToVercel } from '../utils/imageUpload';
+import { uploadImageWithFallback } from '../services/imageService';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { CartContext, type Order } from '../App';
+import { orderService } from '../services/orderService';
 
 const isDevelopment = window.location.hostname === 'localhost';
 const log = (...args: any[]) => {
@@ -80,24 +81,23 @@ const CheckoutPage: React.FC = () => {
     }
   };
 
-  // Function to process image for Vercel Storage hosting
+  // Function to process image for Supabase Storage hosting
   const uploadImageToCloud = async (imageFile: File): Promise<string | null> => {
     try {
-      log('🔄 Uploading image to Vercel Storage...');
+      log('🔄 Uploading image to Supabase Storage...');
       setIsUploadingImage(true);
       
-      // Use our Vercel Storage upload utility
-      const result = await uploadImageToVercel(imageFile);
+      // Use our Supabase Storage upload service with Vercel fallback
+      const result = await uploadImageWithFallback(imageFile);
       
-      if (result.success && result.customUrl) {
-        log('✅ Image uploaded successfully to Vercel Storage');
-        log('📊 Compression ratio:', result.compressionRatio);
-        log('🔗 Custom URL for sheets:', result.customUrl);
+      if (result.success && result.publicUrl) {
+        log('✅ Image uploaded successfully');
+        log('� Public URL for sheets:', result.publicUrl);
         
-        // Return the custom URL format for use in Google Sheets
-        return result.customUrl;
+        // Return the public URL for use in Google Sheets
+        return result.publicUrl;
       } else {
-        console.warn('⚠️ Vercel Storage upload failed:', result.error);
+        console.warn('⚠️ Image upload failed:', result.error);
         return `Upload failed - file: ${imageFile.name}`;
       }
     } catch (error) {
@@ -158,6 +158,46 @@ const CheckoutPage: React.FC = () => {
       const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
       existingOrders.push(order);
       localStorage.setItem('orders', JSON.stringify(existingOrders));
+
+      // Save to Supabase database
+      try {
+        log('🔄 Saving order to Supabase database...');
+        
+        const supabaseOrder = {
+          order_number: orderNumber,
+          customer_name: formData.customerName,
+          customer_phone: formData.contact,
+          customer_address: formData.address,
+          pincode: formData.pincode,
+          tl_name: formData.tlName,
+          member_name: formData.memberName,
+          subtotal: subtotal,
+          discount: discount,
+          delivery_fee: delivery,
+          grand_total: grandTotal,
+          payment_method: 'Payment Screenshot',
+          payment_screenshot_url: paymentScreenshotUrl || '',
+          order_status: 'Pending',
+          order_note: formData.orderNote || ''
+        };
+
+        const supabaseItems = cart.map(item => ({
+          product_name: item.productName,
+          product_variant: item.variant,
+          size: item.size,
+          sku: item.sku,
+          quantity: item.qty,
+          unit_price: item.unitPrice,
+          line_total: item.lineTotal
+        }));
+
+        await orderService.createOrder(supabaseOrder, supabaseItems);
+        log('✅ Order saved to Supabase successfully');
+        
+      } catch (supabaseError) {
+        console.warn('⚠️ Supabase save failed (continuing with Google Sheets):', supabaseError);
+        // Don't throw error - we'll continue with Google Sheets as fallback
+      }
 
       // Submit to Google Apps Script with CORS workaround
       // Using the NEW Web app deployment URL
@@ -520,13 +560,13 @@ const CheckoutPage: React.FC = () => {
                   />
                   <p className="payment-filename">{paymentScreenshot.name}</p>
                   <p className="payment-info">
-                    📤 Image will be compressed and uploaded to Vercel Storage for public access in sheets
+                    📤 Image will be compressed and uploaded to Supabase Storage for public access in sheets
                   </p>
                 </div>
               )}
               {isUploadingImage && (
                 <div className="upload-progress">
-                  🔄 Compressing and uploading to Vercel Storage...
+                  🔄 Compressing and uploading to Supabase Storage...
                 </div>
               )}
             </div>
